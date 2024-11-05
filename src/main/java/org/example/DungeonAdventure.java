@@ -17,7 +17,6 @@ public class DungeonAdventure {
         int dungeonDepth = 1;
         List<String> inventory = new ArrayList<>();
 
-
         System.out.println("🏰 Welcome to the Advanced Dungeon Adventure! 🏰");
         System.out.println("Survive through the dungeon, collect treasure, and prepare for the final boss!");
 
@@ -134,11 +133,19 @@ public class DungeonAdventure {
             int choice = scanner.nextInt();
 
             if (choice == 1) {
-                // Attack the monster
+                // Calculate damage and check for critical hit
                 int damageDealt = random.nextInt(20) + 10;
                 if (inventory.contains("Attack Boost")) {
                     damageDealt += 10;
                 }
+
+                // Critical Hit Chance (20%)
+                boolean isCriticalHit = random.nextInt(5) == 0; // 1 in 5 chance
+                if (isCriticalHit) {
+                    damageDealt *= 2;
+                    System.out.println("💥 Critical Hit! You dealt double damage.");
+                }
+
                 monsterHealth -= damageDealt;
                 System.out.println("⚔️ You hit the monster for " + damageDealt + " damage.");
 
@@ -192,8 +199,17 @@ public class DungeonAdventure {
 
             if (choice == 1) {
                 int damageDealt = random.nextInt(25) + 15;
+
+                // Critical Hit Chance (20%)
+                boolean isCriticalHit = random.nextInt(5) == 0; // 1 in 5 chance
+                if (isCriticalHit) {
+                    damageDealt *= 2;
+                    System.out.println("💥 Critical Hit! You dealt double damage.");
+                }
+
                 bossHealth -= damageDealt;
                 System.out.println("⚔️ You dealt " + damageDealt + " damage to the boss.");
+
                 health -= bossAttack;
             } else if (choice == 2) {
                 System.out.println("Choose an item to use: ");
