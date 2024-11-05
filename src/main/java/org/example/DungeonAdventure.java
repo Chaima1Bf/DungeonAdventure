@@ -15,15 +15,18 @@ public class DungeonAdventure {
         int maxHealth = 100;
         int treasure = 0;
         int dungeonDepth = 1;
+        int experience = 0;
+        int level = 1;
+        int xpToNextLevel = 50; // XP required to level up
         List<String> inventory = new ArrayList<>();
 
         System.out.println("🏰 Welcome to the Advanced Dungeon Adventure! 🏰");
-        System.out.println("Survive through the dungeon, collect treasure, and prepare for the final boss!");
+        System.out.println("Survive through the dungeon, collect treasure, gain experience, and level up!");
 
         boolean isGameOver = false;
         while (!isGameOver) {
             System.out.println("\n🌑 Dungeon Depth: " + dungeonDepth);
-            System.out.println("❤️ Health: " + health + " | 💰 Treasure: " + treasure + " | 🎒 Inventory: " + inventory);
+            System.out.println("❤️ Health: " + health + " | 💰 Treasure: " + treasure + " | 🎒 Inventory: " + inventory + " | ⭐ Level: " + level + " | XP: " + experience + "/" + xpToNextLevel);
             System.out.println("You enter a mysterious room...");
 
             // Randomize room type
@@ -52,8 +55,19 @@ public class DungeonAdventure {
 
                 case 2:
                     // Monster Room
-                    isGameOver = encounterMonster(scanner, random, inventory, dungeonDepth);
-                    health = Math.max(0, health); // Ensure health is not negative
+                    int xpEarned = encounterMonster(scanner, random, inventory, dungeonDepth);
+                    experience += xpEarned;
+                    System.out.println("✨ You earned " + xpEarned + " XP from the battle!");
+
+                    // Check if player can level up
+                    if (experience >= xpToNextLevel) {
+                        level++;
+                        experience -= xpToNextLevel;
+                        xpToNextLevel += 25; // Increase XP requirement for each level
+                        maxHealth += 10; // Increase max health on level up
+                        health = maxHealth; // Restore health on level up
+                        System.out.println("⭐ You've leveled up to Level " + level + "! Max health increased to " + maxHealth + " and health restored.");
+                    }
                     break;
 
                 case 3:
@@ -118,10 +132,11 @@ public class DungeonAdventure {
     }
 
     // Monster encounter function
-    private static boolean encounterMonster(Scanner scanner, Random random, List<String> inventory, int dungeonDepth) {
+    private static int encounterMonster(Scanner scanner, Random random, List<String> inventory, int dungeonDepth) {
         System.out.println("A monster appears!");
         int monsterHealth = random.nextInt(40) + dungeonDepth * 5;
         int monsterAttack = random.nextInt(15) + dungeonDepth;
+        int experienceGained = random.nextInt(20) + 10; // XP gained from defeating monster
 
         while (monsterHealth > 0) {
             System.out.println("Monster's health: " + monsterHealth);
@@ -173,13 +188,13 @@ public class DungeonAdventure {
                 System.out.println("You attempt to flee...");
                 if (random.nextBoolean()) {
                     System.out.println("You successfully fled from the monster!");
-                    return false;
+                    return 0;
                 } else {
                     System.out.println("Failed to flee! The monster attacks as you try to escape.");
                 }
             }
         }
-        return false;
+        return experienceGained;
     }
 
     private static boolean finalBossEncounter(Scanner scanner, Random random, List<String> inventory, int health) {
