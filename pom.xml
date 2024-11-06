@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -18,14 +17,18 @@
     <distributionManagement>
         <repository>
             <id>deploymentRepo</id>
-            <name>Nexus Repository</name>
+            <name>Nexus Release Repository</name>
             <url>http://192.168.33.10:8081/repository/maven-releases/</url>
         </repository>
+        <snapshotRepository>
+            <id>snapshotRepo</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.33.10:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
+    <!-- Dependencies -->
     <dependencies>
-
-        <!-- JUnit for Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -38,7 +41,6 @@
             <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Mockito for Unit Tests -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -49,7 +51,6 @@
 
     <build>
         <plugins>
-            <!-- Compiler Plugin (already set) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -60,7 +61,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Exec Plugin for running the application -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -70,18 +70,16 @@
                 </configuration>
             </plugin>
 
-            <!-- SonarQube Plugin -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.9.1.2184</version>
             </plugin>
 
-            <!-- Maven Deploy Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version> <!-- Explicit version for stability -->
+                <version>2.8.2</version>
                 <configuration>
                     <repositoryId>deploymentRepo</repositoryId>
                     <url>http://192.168.33.10:8081/repository/maven-releases/</url>
